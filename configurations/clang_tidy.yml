@@ -1,0 +1,33 @@
+---
+Checks: >-
+  *,
+  -abseil-*,
+  -altera-*,
+  -android-*,
+  -cppcoreguidelines-*,
+  -fuchsia-*,
+  -google-*,
+  -llvm*,
+  -zircon-*,
+  -bugprone-easily-swappable-parameters,
+  -bugprone-suspicious-realloc-usage,
+  -clang-analyzer-security.insecureAPI.DeprecatedOrUnsafeBufferHandling,
+  -clang-diagnostic-c++98-compat-pedantic,
+  -clang-diagnostic-c++98-compat,
+  -clang-diagnostic-cast-qual,
+  -clang-diagnostic-declaration-after-statement,
+  -clang-diagnostic-error,
+  -clang-diagnostic-pre-c++20-compat-pedantic,
+  -clang-diagnostic-unsafe-buffer-usage,
+  -misc-include-cleaner,
+  -misc-non-private-member-variables-in-classes,
+  -modernize-use-trailing-return-type,
+  -modernize-use-using,
+  -performance-enum-size,
+  -readability-else-after-return,
+  -readability-function-cognitive-complexity,
+  -readability-isolate-declaration,
+HeaderFilterRegex: '.*'
+
+# Notes:
+# - Maybe bring back `readability-function-cognitive-complexity`.

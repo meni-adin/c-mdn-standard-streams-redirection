@@ -1,0 +1,63 @@
+cmake_minimum_required(VERSION 3.28)
+project(c_standard_streams_redirection
+    LANGUAGES C CXX
+)
+string(TOUPPER ${PROJECT_NAME} PROJECT_NAME_UC)
+
+set(CMAKE_C_STANDARD 11)
+set(CMAKE_C_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+if(NOT (CMAKE_C_COMPILER_ID STREQUAL CMAKE_CXX_COMPILER_ID))
+    message(FATAL_ERROR "CMAKE_C_COMPILER_ID (${CMAKE_C_COMPILER_ID}) expected to be identical to CMAKE_CXX_COMPILER_ID (${CMAKE_CXX_COMPILER_ID})")
+endif()
+
+message(STATUS "CMAKE_C_COMPILER_ID: ${CMAKE_C_COMPILER_ID}")
+message(STATUS "CMAKE_CXX_COMPILER_ID: ${CMAKE_CXX_COMPILER_ID}")
+
+if(NOT DEFINED ${PROJECT_NAME_UC}_SAFE_MODE)
+    message(FATAL_ERROR "${PROJECT_NAME_UC}_SAFE_MODE must be set to either TRUE or FALSE")
+endif()
+message(STATUS "${PROJECT_NAME_UC}_SAFE_MODE: ${${PROJECT_NAME_UC}_SAFE_MODE}")
+set(C_ERRORS_SAFE_MODE ${${PROJECT_NAME_UC}_SAFE_MODE} CACHE BOOL "")
+
+set(CONFIG_FILE_NAME "${PROJECT_NAME}_config.h")
+set(CONFIG_DIR_NAME configurations)
+file(TO_CMAKE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/${CONFIG_DIR_NAME}/${CONFIG_FILE_NAME}.in" CONFIG_SRC_FILE)
+file(TO_CMAKE_PATH "${CMAKE_CURRENT_BINARY_DIR}/${CONFIG_DIR_NAME}" CONFIG_DST_DIR)
+file(TO_CMAKE_PATH "${CONFIG_DST_DIR}/${CONFIG_FILE_NAME}" CONFIG_DST_FILE)
+configure_file(${CONFIG_SRC_FILE} ${CONFIG_DST_FILE})
+
+set(INCLUDE_DIRECTORIES_TO_PROPAGATE ${CONFIG_DST_DIR})
+include_directories(${INCLUDE_DIRECTORIES_TO_PROPAGATE})
+
+file(TO_CMAKE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake" MY_CMAKE_SCRIPTS_DIR)
+set(CMAKE_MODULE_PATH "${MY_CMAKE_SCRIPTS_DIR}" ${CMAKE_MODULE_PATH})
+
+include(utils)
+include(fetch_content_wrapper)
+cmake_language(CALL ${PROJECT_NAME}_init_fetch_content_wrapper)
+
+cmake_language(CALL ${PROJECT_NAME}_set_compiler_flags)
+if(NOT DEFINED SANITIZED_BUILD)
+    message(FATAL_ERROR "SANITIZED_BUILD must be set to either TRUE or FALSE")
+endif()
+message(STATUS "SANITIZED_BUILD: ${SANITIZED_BUILD}")
+if(SANITIZED_BUILD)
+    cmake_language(CALL ${PROJECT_NAME}_enable_sanitizers)
+endif()
+
+if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+    set(${PROJECT_NAME_UC}_ENABLE_COVERAGE ON)
+    cmake_language(CALL ${PROJECT_NAME}_delete_gcda_files)
+else ()
+    set(${PROJECT_NAME_UC}_ENABLE_COVERAGE OFF)
+endif()
+
+include(CTest)
+
+add_subdirectory(src)
+if(${PROJECT_NAME_UC}_ENABLE_TESTS)
+    add_subdirectory(test)
+endif()
