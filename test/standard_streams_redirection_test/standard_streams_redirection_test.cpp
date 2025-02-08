@@ -5,6 +5,7 @@
 #include <iostream>
 
 #if defined __linux__
+#include <limits.h>
 #elif defined __APPLE__
 # include <mach-o/dyld.h>
 #elif defined _WIN32
@@ -38,13 +39,14 @@ public:
 
     static void initTestSuitePaths() {  // TODO: review all versions - handle long paths
 #if defined __linux__
-        char    path[PATH_MAX];
-        ssize_t count = readlink("/proc/self/exe", path, PATH_MAX);
-        if (count != -1) {
-            path[count] = '\0';
-            return std::string(path).substr(0, std::string(path).find_last_of(PATH_SEPARATOR));
-        }
-        return "";
+        char    pathBuffer[PATH_MAX];
+        ssize_t count = readlink("/proc/self/exe", pathBuffer, sizeof(pathBuffer));
+        ASSERT_NE(count, -1);
+        ASSERT_NE(count, PATH_MAX);
+
+        pathBuffer[count] = '\0';
+        testExecutableDirPath = fs::path{pathBuffer}.parent_path();
+        testOutputDirPath     = testExecutableDirPath / "test_output";
 #elif defined __APPLE__
         char    *pathBuffer    = nullptr;
         uint32_t pathBufferLen = 0;
