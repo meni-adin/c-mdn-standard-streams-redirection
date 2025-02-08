@@ -7,25 +7,37 @@ import utils
 
 BUILD_TYPES = ['debug-sanitized', 'debug-nonsanitized', 'release-sanitized', 'release-nonsanitized']
 
-def run_memory_test(build_type):
-    if utils.program_available('valgrind'):
-        command = f'ctest --preset test-{build_type} --show-only=json-v1'
-        result = utils.run_command(command, shell=True, check=True, stdout=subprocess.PIPE, text=True)
+def get_tests_executables_dict(build_type):
+    command = f'ctest --preset test-{build_type} --show-only=json-v1'
+    result = utils.run_command(command, shell=True, check=True, stdout=subprocess.PIPE, text=True)
 
-        tests_json = json.loads(result.stdout)
-        tests = tests_json.get('tests', [])
-        tests_executables_dict = {}  # Using dictionary and not set as iterating it preserves insertion order
-        for test in tests:
-            command = test.get('command', [])
-            if command:
-                tests_executables_dict[command[0]] = None
-            else:
-                utils.colored_print(f"No commands found for test {test.get('name')}")
-                exit(1)
+    tests_json = json.loads(result.stdout)
+    tests = tests_json.get('tests', [])
+    tests_executables_dict = {}  # Using dictionary and not set as iterating it preserves insertion order
+    for test in tests:
+        command = test.get('command', [])
+        if command:
+            tests_executables_dict[command[0]] = None
+        else:
+            utils.colored_print(f"No commands found for test {test.get('name')}")
+            exit(1)
+    return tests_executables_dict
+
+def run_tests(tests_executables_dict):
+    for key in tests_executables_dict:
+        command = f'{key}'
+        utils.run_command(command, shell=True, check=True)
+
+def run_memory_test(tests_executables_dict):
+    if utils.program_available('valgrind'):
+        command = f'valgrind --version'
+        utils.run_command(command, shell=True, check=True)
+
         for key in tests_executables_dict:
             command = f'valgrind --error-exitcode=1 --leak-check=full {key}'
             utils.run_command(command, shell=True, check=True)
 
+def run_clang_tidy_test(build_type):
     if utils.program_available('clang-tidy') and not (utils.running_on_linux() and utils.running_on_github_actions()):
         command = f'clang-tidy --version'
         utils.run_command(command, shell=True, check=True)
@@ -41,6 +53,9 @@ def run_coverage_test(build_type):
         return
     if not utils.program_available('gcov'):
         utils.colored_print("Skipping coverage test - 'gcov' not available")
+
+    command = f'gcov --version'
+    utils.run_command(command, shell=True, check=True)
 
     gcda_files = list(Path(f'{utils.BUILD_TOP_DIR/build_type/"src"}').rglob(f'*.gcda'))
     utils.colored_print('gcdaFiles:')
@@ -97,11 +112,14 @@ def main():
         command = f'cmake --build --preset build-{build_type}'
         utils.run_command(command, shell=True, check=True)
 
-        command = f'ctest --preset test-{build_type}'
-        utils.run_command(command, shell=True, check=True)
+        tests_executables_dict = get_tests_executables_dict(build_type)
+
+        run_tests(tests_executables_dict)
 
         if 'nonsanitized' in build_type:
-            run_memory_test(build_type)
+            run_memory_test(tests_executables_dict)
+
+        run_clang_tidy_test(build_type)
 
         if 'debug' in build_type:
             run_coverage_test(build_type)
