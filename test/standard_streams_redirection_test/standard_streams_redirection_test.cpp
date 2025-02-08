@@ -1,7 +1,6 @@
 
 #include <gmock/gmock.h>
 #include <iostream>
-#include <limits.h>
 
 #include "errors.h"
 #include "standard_streams_redirection.h"
