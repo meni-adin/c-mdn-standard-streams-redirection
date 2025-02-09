@@ -1,4 +1,6 @@
 
+#define _CRT_SECURE_NO_WARNINGS
+
 #include <filesystem>
 #include <fstream>
 #include <gmock/gmock.h>
@@ -9,6 +11,7 @@
 #elif defined __APPLE__
 # include <mach-o/dyld.h>
 #elif defined _WIN32
+# include <windows.h>
 #endif  // OS
 
 #include "errors.h"
@@ -37,16 +40,17 @@ public:
         initTestFullName();
     }
 
-    static void initTestSuitePaths() {  // TODO: review all versions - handle long paths
+    static void initTestSuitePaths() {
 #if defined __linux__
         char    pathBuffer[PATH_MAX];
-        ssize_t count = readlink("/proc/self/exe", pathBuffer, sizeof(pathBuffer));
+        ssize_t count;
+
+        count = readlink("/proc/self/exe", pathBuffer, sizeof(pathBuffer));
         ASSERT_NE(count, -1);
         ASSERT_NE(count, PATH_MAX);
 
         pathBuffer[count] = '\0';
         testExecutableDirPath = fs::path{pathBuffer}.parent_path();
-        testOutputDirPath     = testExecutableDirPath / "test_output";
 #elif defined __APPLE__
         char    *pathBuffer    = nullptr;
         uint32_t pathBufferLen = 0;
@@ -61,11 +65,11 @@ public:
         ASSERT_EQ(retVal, 0);
 
         testExecutableDirPath = fs::path{pathBuffer}.parent_path();
-        testOutputDirPath     = testExecutableDirPath / "test_output";
-
         free(pathBuffer);
 #elif defined _WIN32
+        testExecutableDirPath = fs::path{_pgmptr}.parent_path();
 #endif  // OS
+        testOutputDirPath     = testExecutableDirPath / "test_output";
     }
 
     void initTestFullName() {
@@ -84,7 +88,7 @@ public:
 
         testOutputFilePath  = testOutputDirPath / testFullName;
         testOutputFilePath += "_file.txt";
-        testOutputFile      = fopen(testOutputFilePath.c_str(), "w");
+        testOutputFile      = fopen(testOutputFilePath.string().c_str(), "w");
         ASSERT_NE(testOutputFile, nullptr) << "Failed to open file: " << testOutputFilePath << "\n";
     }
 };
