@@ -22,6 +22,19 @@ typedef struct StandardStreamsRedirection_InternalState_t_ {
 static StandardStreamsRedirection_InternalState_t  g_StandardStreamsRedirection_internalState_;
 static StandardStreamsRedirection_InternalState_t *g_StandardStreamsRedirection_internalState = &g_StandardStreamsRedirection_internalState_;
 
+static void StandardStreamsRedirection_flushStream(StandardStreamsRedirection_StreamID_t streamID) {
+    switch (streamID) {
+        case STREAM_ID_STDOUT:
+            fflush(stdout);
+            break;
+        case STREAM_ID_STDERR:
+            fflush(stderr);
+            break;
+        default:
+            break;
+    }
+}
+
 status_t StandardStreamsRedirection_start(StandardStreamsRedirection_StreamID_t streamID, FILE *redirectionFile) {
     int redirectionFD, backupFD, result;
 
@@ -36,6 +49,8 @@ status_t StandardStreamsRedirection_start(StandardStreamsRedirection_StreamID_t 
         return ERR_INVALID_OPERATION;
     }
 #endif  // C_STANDARD_STREAMS_REDIRECTION_SAFE_MODE
+
+    StandardStreamsRedirection_flushStream(streamID);
 
     redirectionFD = CROSS_OS_fileno(redirectionFile);
     if (redirectionFD == -1) {
@@ -68,7 +83,8 @@ status_t StandardStreamsRedirection_stop(StandardStreamsRedirection_StreamID_t s
     }
 #endif  // C_STANDARD_STREAMS_REDIRECTION_SAFE_MODE
 
-    // TODO: flush stream?
+    StandardStreamsRedirection_flushStream(streamID);
+
     result = CROSS_OS_dup2(g_StandardStreamsRedirection_internalState->streamsData[streamID].backupFD, (int)streamID);
     if (result == -1) {
         return ERR_CHECK_ERRNO;
