@@ -51,6 +51,7 @@ function(${PROJECT_NAME}_set_target_c_compiler_flags target)
             /Wall
             /WX
             /wd4061
+            /wd4062
             /wd4710
             /wd4711
             /wd4820
