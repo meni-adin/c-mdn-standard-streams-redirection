@@ -30,8 +30,6 @@ static void StandardStreamsRedirection_flushStream(StandardStreamsRedirection_St
         case STREAM_ID_STDERR:
             fflush(stderr);
             break;
-        default:
-            break;
     }
 }
 
