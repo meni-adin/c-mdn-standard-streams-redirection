@@ -21,7 +21,7 @@ extern "C" {
 
 #include <stdio.h>
 
-#include "errors.h"
+#include "mdn_status.h"
 
 typedef enum StandardStreamsRedirection_StreamID_t_ {
     STREAM_ID_STDIN,
@@ -30,8 +30,8 @@ typedef enum StandardStreamsRedirection_StreamID_t_ {
     STREAM_ID_COUNT,
 } StandardStreamsRedirection_StreamID_t;
 
-status_t StandardStreamsRedirection_start(StandardStreamsRedirection_StreamID_t streamID, FILE *redirectionFile);
-status_t StandardStreamsRedirection_stop(StandardStreamsRedirection_StreamID_t streamID);
+mdn_Status_t StandardStreamsRedirection_start(StandardStreamsRedirection_StreamID_t streamID, FILE *redirectionFile);
+mdn_Status_t StandardStreamsRedirection_stop(StandardStreamsRedirection_StreamID_t streamID);
 
 #ifdef __cplusplus
 }

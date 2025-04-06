@@ -13,6 +13,7 @@ add_executable(${TARGET_NAME}
 target_link_libraries(${TARGET_NAME}
     GTest::gmock
     standard_streams_redirection
+    gtest_extension
 )
 
 cmake_language(CALL ${PROJECT_NAME}_set_target_cpp_compiler_flags ${TARGET_NAME})

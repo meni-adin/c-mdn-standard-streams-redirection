@@ -26,6 +26,8 @@ def get_tests_executables_dict(build_type):
 def run_tests(tests_executables_dict):
     for key in tests_executables_dict:
         command = f'{key}'
+        if utils.running_on_macos():
+            command = 'MallocNanoZone=0 ' + command
         utils.run_command(command, shell=True, check=True)
 
 def run_memory_test(tests_executables_dict):
@@ -118,8 +120,7 @@ def main():
 
         if 'nonsanitized' in build_type:
             run_memory_test(tests_executables_dict)
-
-        run_clang_tidy_test(build_type)
+            run_clang_tidy_test(build_type)
 
         if 'debug' in build_type:
             run_coverage_test(build_type)

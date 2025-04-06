@@ -91,6 +91,7 @@ function(${PROJECT_NAME}_set_target_cpp_compiler_flags target)
             /wd4820
             /wd5026
             /wd5027
+            /wd5045
             /wd5072
         )
     else()

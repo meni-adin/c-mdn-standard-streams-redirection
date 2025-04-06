@@ -13,7 +13,7 @@ target_include_directories(${TARGET_NAME}
 )
 
 target_link_libraries(${TARGET_NAME}
-    errors
+    mdn_status
 )
 
 cmake_language(CALL ${PROJECT_NAME}_set_target_c_compiler_flags ${TARGET_NAME})
