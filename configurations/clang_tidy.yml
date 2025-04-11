@@ -18,6 +18,7 @@ Checks: >-
   -clang-diagnostic-declaration-after-statement,
   -clang-diagnostic-error,
   -clang-diagnostic-pre-c++20-compat-pedantic,
+  -clang-diagnostic-switch-default,
   -clang-diagnostic-switch,
   -clang-diagnostic-unsafe-buffer-usage,
   -misc-include-cleaner,
