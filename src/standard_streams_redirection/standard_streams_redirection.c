@@ -29,9 +29,6 @@ static void StandardStreamsRedirection_flushStream(StandardStreamsRedirection_St
         case STREAM_ID_STDERR:
             (void)fflush(stderr);
             break;
-        case STREAM_ID_STDIN:
-        case STREAM_ID_COUNT:
-            break;
     }
 }
 
@@ -45,8 +42,6 @@ static void StandardStreamsRedirection_clearEOF(StandardStreamsRedirection_Strea
             break;
         case STREAM_ID_STDERR:
             clearerr(stderr);
-            break;
-        case STREAM_ID_COUNT:
             break;
     }
 }
