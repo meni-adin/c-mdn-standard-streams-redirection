@@ -14,7 +14,7 @@
 #elif defined __APPLE__
 # include <mach-o/dyld.h>
 #elif defined _WIN32
-# include <windows.h>
+# include <Windows.h>
 #endif  // OS
 
 #include "gtest_extension.hpp"
