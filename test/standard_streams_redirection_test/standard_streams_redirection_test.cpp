@@ -132,7 +132,7 @@ protected:
             return "";
         }
 
-        return std::accumulate(std::next(stringsVector.begin()), stringsVector.end(), stringsVector[0], [](std::string firstString, std::string secondString) {
+        return std::accumulate(std::next(stringsVector.begin()), stringsVector.end(), stringsVector[0], [](std::string firstString, const std::string &secondString) {
             return std::move(firstString) + " " + secondString;
         });
     }
@@ -318,7 +318,7 @@ TEST_F(StandardStreamsRedirectionTest, StderrRedirectionRestore) {
 }
 
 TEST_F(StandardStreamsRedirectionTest, StdinStdoutStderrRedirectionRestore) {
-    if (testWithinTest == false) {
+    if (!testWithinTest) {
         ASSERT_NO_FATAL_FAILURE(writeStringToFile(stdin1stLine, stdinRedirectionFilePath));
         ASSERT_NO_FATAL_FAILURE(writeStringToFile(stdin2ndLine, stdinCliRedirectionFilePath));
         const std::string command = generateCommand(false);
