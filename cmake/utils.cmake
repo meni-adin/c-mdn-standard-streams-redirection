@@ -27,6 +27,7 @@ function(${PROJECT_NAME}_set_target_c_compiler_flags target)
             -Wnull-dereference
             -Wdouble-promotion
             -Wimplicit-fallthrough
+            -Wno-switch
         )
         if(${PROJECT_NAME_UC}_ENABLE_COVERAGE)
             target_compile_options(${target} PRIVATE
@@ -49,6 +50,8 @@ function(${PROJECT_NAME}_set_target_c_compiler_flags target)
         target_compile_options(${target} PRIVATE
             /Wall
             /WX
+            /wd4061
+            /wd4062
             /wd4710
             /wd4711
             /wd4820
@@ -88,6 +91,7 @@ function(${PROJECT_NAME}_set_target_cpp_compiler_flags target)
             /wd4820
             /wd5026
             /wd5027
+            /wd5045
             /wd5072
         )
     else()
