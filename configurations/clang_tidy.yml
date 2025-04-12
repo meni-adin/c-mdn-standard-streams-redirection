@@ -18,6 +18,7 @@ Checks: >-
   -clang-diagnostic-cast-qual,
   -clang-diagnostic-declaration-after-statement,
   -clang-diagnostic-error,
+  -clang-diagnostic-c++98-compat-local-type-template-args,
   -clang-diagnostic-exit-time-destructors,
   -clang-diagnostic-global-constructors,
   -clang-diagnostic-pre-c++17-compat,

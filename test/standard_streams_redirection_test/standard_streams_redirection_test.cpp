@@ -132,8 +132,8 @@ protected:
             return "";
         }
 
-        return std::accumulate(std::next(stringsVector.begin()), stringsVector.end(), stringsVector[0], [](std::string a, std::string b) {
-            return std::move(a) + " " + b;
+        return std::accumulate(std::next(stringsVector.begin()), stringsVector.end(), stringsVector[0], [](std::string firstString, std::string secondString) {
+            return std::move(firstString) + " " + secondString;
         });
     }
 
@@ -162,7 +162,7 @@ protected:
     }
 
     std::string generateCommand(bool useEmptyStdin = true) {
-        std::vector<std::string> commandElements{
+        const std::vector<std::string> commandElements{
             testExecutablePath.string(),
             getGtestFilterForCurrentTest(),
             testWithinTestFlag,
@@ -247,12 +247,12 @@ TEST_F(StandardStreamsRedirectionTest, StdinStdoutStderrRedirection) {
 }
 
 TEST_F(StandardStreamsRedirectionTest, StdinRedirectionRestore) {
-    if (testWithinTest == false) {
+    if (!testWithinTest) {
         ASSERT_NO_FATAL_FAILURE(writeStringToFile(stdin1stLine, stdinRedirectionFilePath));
         ASSERT_NO_FATAL_FAILURE(writeStringToFile(stdin2ndLine, stdinCliRedirectionFilePath));
-        std::string command = generateCommand(false);
+        const std::string command = generateCommand(false);
 
-        int errorCode = system(command.c_str());
+        const int errorCode = system(command.c_str());  // NOLINT
         ASSERT_EQ(errorCode, 0) << "Inner test failed with error code " << errorCode;
     } else {
         ASSERT_NO_FATAL_FAILURE(openStdinRedirectionFileForReading());
@@ -270,10 +270,10 @@ TEST_F(StandardStreamsRedirectionTest, StdinRedirectionRestore) {
 }
 
 TEST_F(StandardStreamsRedirectionTest, StdoutRedirectionRestore) {
-    if (testWithinTest == false) {
-        std::string command = generateCommand();
+    if (!testWithinTest) {
+        const std::string command = generateCommand();
 
-        int errorCode = system(command.c_str());
+        const int errorCode = system(command.c_str());  // NOLINT
         ASSERT_EQ(errorCode, 0) << "Inner test failed with error code " << errorCode;
 
         ASSERT_NO_FATAL_FAILURE(readFileToString(stdoutCliRedirectionFilePath, stdoutCliRedirectionFileContent));
@@ -294,10 +294,10 @@ TEST_F(StandardStreamsRedirectionTest, StdoutRedirectionRestore) {
 }
 
 TEST_F(StandardStreamsRedirectionTest, StderrRedirectionRestore) {
-    if (testWithinTest == false) {
-        std::string command = generateCommand();
+    if (!testWithinTest) {
+        const std::string command = generateCommand();
 
-        int errorCode = system(command.c_str());
+        const int errorCode = system(command.c_str());  // NOLINT
         ASSERT_EQ(errorCode, 0) << "Inner test failed with error code " << errorCode;
 
         ASSERT_NO_FATAL_FAILURE(readFileToString(stderrCliRedirectionFilePath, stderrCliRedirectionFileContent));
@@ -321,9 +321,9 @@ TEST_F(StandardStreamsRedirectionTest, StdinStdoutStderrRedirectionRestore) {
     if (testWithinTest == false) {
         ASSERT_NO_FATAL_FAILURE(writeStringToFile(stdin1stLine, stdinRedirectionFilePath));
         ASSERT_NO_FATAL_FAILURE(writeStringToFile(stdin2ndLine, stdinCliRedirectionFilePath));
-        std::string command = generateCommand(false);
+        const std::string command = generateCommand(false);
 
-        int errorCode = system(command.c_str());
+        const int errorCode = system(command.c_str());  // NOLINT
         ASSERT_EQ(errorCode, 0) << "Inner test failed with error code " << errorCode;
 
         ASSERT_NO_FATAL_FAILURE(readFileToString(stdoutCliRedirectionFilePath, stdoutCliRedirectionFileContent));
