@@ -5,6 +5,19 @@
 
 #include "mdn/status.h"
 
+#if defined(__linux__) || defined(__APPLE__)
+# include <fcntl.h>
+# include <unistd.h>
+# define CROSS_OS_dup(...)    dup(__VA_ARGS__)
+# define CROSS_OS_dup2(...)   dup2(__VA_ARGS__)
+# define CROSS_OS_fileno(...) fileno(__VA_ARGS__)
+#elif defined(_WIN32)
+# include <io.h>
+# define CROSS_OS_dup(...)    _dup(__VA_ARGS__)
+# define CROSS_OS_dup2(...)   _dup2(__VA_ARGS__)
+# define CROSS_OS_fileno(...) _fileno(__VA_ARGS__)
+#endif  // OS
+
 #ifdef MDN_STANDARD_STREAMS_REDIRECTION_SAFE_MODE
 # define IS_VALID_STREAM_ID(streamID) ((0 <= (streamID)) && ((streamID) < MDN_STANDARD_STREAMS_REDIRECTION_STREAM_ID_COUNT))
 #endif  // MDN_STANDARD_STREAMS_REDIRECTION_SAFE_MODE
