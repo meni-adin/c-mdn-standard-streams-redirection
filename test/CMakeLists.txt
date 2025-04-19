@@ -6,7 +6,7 @@ cmake_language(CALL ${PROJECT_NAME}_fetch_content_wrapper
 )
 cmake_language(CALL ${PROJECT_NAME}_fetch_content_wrapper
     gtest_extension
-    GIT_REPOSITORY https://github.com/meni-adin/cpp-gtest-extension.git
+    GIT_REPOSITORY https://github.com/meni-adin/cpp-mdn-gtest-extension.git
     GIT_TAG        origin/main
 )
 

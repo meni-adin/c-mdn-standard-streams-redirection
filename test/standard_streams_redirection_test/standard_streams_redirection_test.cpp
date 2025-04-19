@@ -17,14 +17,14 @@
 # include <Windows.h>
 #endif  // OS
 
-#include "gtest_extension.hpp"
-#include "mdn_status.h"
-#include "standard_streams_redirection.h"
+#include "mdn/gtest_extension.hpp"
+#include "mdn/standard_streams_redirection.h"
+#include "mdn/status.h"
 
 using namespace testing;
 namespace fs = std::filesystem;
 
-class StandardStreamsRedirectionTest : public GTestExtension {
+class StandardStreamsRedirectionTest : public mdn::GTestExtension {
 public:
     static inline bool              testWithinTest = false;
     static inline const std::string testWithinTestFlag{"--test_within_test"};
@@ -72,18 +72,18 @@ protected:
 
 public:
     static void SetUpTestSuite() {
-        ASSERT_NO_FATAL_FAILURE(GTestExtension::SetUpTestSuite());
+        ASSERT_NO_FATAL_FAILURE(mdn::GTestExtension::SetUpTestSuite());
 
         stdinCommonEmptyFilePath = testOutputDirPath / (testSuiteName + "_" + stdinCommonEmptyFileName + textFileExtension);
         writeStringToFile(std::string{"\n"}, stdinCommonEmptyFilePath);
     }
 
     static void TearDownTestSuite() {
-        ASSERT_NO_FATAL_FAILURE(GTestExtension::TearDownTestSuite());
+        ASSERT_NO_FATAL_FAILURE(mdn::GTestExtension::TearDownTestSuite());
     }
 
     void SetUp() override {
-        ASSERT_NO_FATAL_FAILURE(GTestExtension::SetUp());
+        ASSERT_NO_FATAL_FAILURE(mdn::GTestExtension::SetUp());
 
         stdinRedirectionFilePath     = generateTestFilePath(stdinRedirectionFileName);
         stdoutRedirectionFilePath    = generateTestFilePath(stdoutRedirectionFileName);
@@ -94,7 +94,7 @@ public:
     }
 
     void TearDown() override {
-        ASSERT_NO_FATAL_FAILURE(GTestExtension::TearDown());
+        ASSERT_NO_FATAL_FAILURE(mdn::GTestExtension::TearDown());
     }
 
 protected:
