@@ -1,3 +1,11 @@
+function(${PROJECT_NAME}_print_variable variable)
+    if(DEFINED ${variable})
+        message(STATUS "${variable} = ${${variable}}")
+    else()
+        message(FATAL_ERROR "Variable '${variable}' is not defined.")
+    endif()
+endfunction()
+
 function(${PROJECT_NAME}_set_compiler_flags)
     if((CMAKE_C_COMPILER_ID STREQUAL "AppleClang") OR (CMAKE_C_COMPILER_ID STREQUAL "GNU"))
         if(CMAKE_C_COMPILER_ID STREQUAL "AppleClang")

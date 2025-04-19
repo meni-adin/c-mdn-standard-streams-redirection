@@ -1,9 +1,9 @@
 
-#include "standard_streams_redirection.h"
+#include "mdn/standard_streams_redirection.h"
 
 #include <stdbool.h>
 
-#include "mdn_status.h"
+#include "mdn/status.h"
 
 #ifdef C_STANDARD_STREAMS_REDIRECTION_SAFE_MODE
 # define IS_VALID_STREAM_ID(streamID) ((0 <= (streamID)) && ((streamID) < STREAM_ID_COUNT))

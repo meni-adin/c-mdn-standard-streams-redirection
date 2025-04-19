@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.28)
-project(c_standard_streams_redirection
+project(mdn_standard_streams_redirection
     LANGUAGES C CXX
 )
 string(TOUPPER ${PROJECT_NAME} PROJECT_NAME_UC)
@@ -16,13 +16,6 @@ endif()
 message(STATUS "CMAKE_C_COMPILER_ID: ${CMAKE_C_COMPILER_ID}")
 message(STATUS "CMAKE_CXX_COMPILER_ID: ${CMAKE_CXX_COMPILER_ID}")
 
-if(NOT DEFINED ${PROJECT_NAME_UC}_SAFE_MODE)
-    message(FATAL_ERROR "${PROJECT_NAME_UC}_SAFE_MODE must be set to either TRUE or FALSE")
-endif()
-message(STATUS "${PROJECT_NAME_UC}_SAFE_MODE: ${${PROJECT_NAME_UC}_SAFE_MODE}")
-set(CPP_GTEST_EXTENSION_SAFE_MODE ${${PROJECT_NAME_UC}_SAFE_MODE} CACHE BOOL "")
-set(MDN_STATUS_SAFE_MODE ${${PROJECT_NAME_UC}_SAFE_MODE} CACHE BOOL "")
-
 set(CONFIG_FILE_NAME "${PROJECT_NAME}_config.h")
 set(CONFIG_DIR_NAME configurations)
 file(TO_CMAKE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/${CONFIG_DIR_NAME}/${CONFIG_FILE_NAME}.in" CONFIG_SRC_FILE)
@@ -38,14 +31,25 @@ set(CMAKE_MODULE_PATH "${MY_CMAKE_SCRIPTS_DIR}" ${CMAKE_MODULE_PATH})
 
 include(utils)
 include(fetch_content_wrapper)
-cmake_language(CALL ${PROJECT_NAME}_init_fetch_content_wrapper)
 
+cmake_language(CALL ${PROJECT_NAME}_init_fetch_content_wrapper)
 cmake_language(CALL ${PROJECT_NAME}_set_compiler_flags)
-if(NOT DEFINED SANITIZED_BUILD)
-    message(FATAL_ERROR "SANITIZED_BUILD must be set to either TRUE or FALSE")
-endif()
-message(STATUS "SANITIZED_BUILD: ${SANITIZED_BUILD}")
-if(SANITIZED_BUILD)
+
+cmake_language(CALL ${PROJECT_NAME}_print_variable CMAKE_C_COMPILER_ID)
+cmake_language(CALL ${PROJECT_NAME}_print_variable CMAKE_CXX_COMPILER_ID)
+cmake_language(CALL ${PROJECT_NAME}_print_variable ${PROJECT_NAME_UC}_SAFE_MODE)
+cmake_language(CALL ${PROJECT_NAME}_print_variable ${PROJECT_NAME_UC}_ENABLE_TESTS)
+cmake_language(CALL ${PROJECT_NAME}_print_variable ${PROJECT_NAME_UC}_SANITIZED_BUILD)
+
+set(MDN_GTEST_EXTENSION_SAFE_MODE ${${PROJECT_NAME_UC}_SAFE_MODE} CACHE BOOL "")
+set(MDN_GTEST_EXTENSION_SANITIZED_BUILD ${${PROJECT_NAME_UC}_SANITIZED_BUILD} CACHE BOOL "")
+set(MDN_GTEST_EXTENSION_ENABLE_TESTS OFF CACHE BOOL "")
+set(MDN_STATUS_SAFE_MODE ${${PROJECT_NAME_UC}_SAFE_MODE} CACHE BOOL "")
+set(MDN_STATUS_SANITIZED_BUILD ${${PROJECT_NAME_UC}_SANITIZED_BUILD} CACHE BOOL "")
+set(MDN_STATUS_ENABLE_TESTS OFF CACHE BOOL "")
+
+
+if(${PROJECT_NAME_UC}_SANITIZED_BUILD)
     cmake_language(CALL ${PROJECT_NAME}_enable_sanitizers)
 endif()
 

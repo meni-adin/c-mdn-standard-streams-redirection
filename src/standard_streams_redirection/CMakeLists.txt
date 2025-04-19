@@ -1,4 +1,4 @@
-set(TARGET_NAME standard_streams_redirection)
+set(TARGET_NAME mdn_standard_streams_redirection)
 
 set(TARGET_SOURCES
     "standard_streams_redirection.c"
@@ -13,7 +13,7 @@ target_include_directories(${TARGET_NAME}
 )
 
 target_link_libraries(${TARGET_NAME}
-    mdn_status
+    PUBLIC mdn_status
 )
 
 cmake_language(CALL ${PROJECT_NAME}_set_target_c_compiler_flags ${TARGET_NAME})

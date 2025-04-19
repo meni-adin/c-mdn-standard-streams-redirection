@@ -1,6 +1,6 @@
 
-#ifndef STANDARD_STREAMS_REDIRECTION_H
-#define STANDARD_STREAMS_REDIRECTION_H
+#ifndef MDN_STANDARD_STREAMS_REDIRECTION_H
+#define MDN_STANDARD_STREAMS_REDIRECTION_H
 
 #ifdef __cplusplus
 extern "C" {
@@ -21,7 +21,7 @@ extern "C" {
 
 #include <stdio.h>
 
-#include "mdn_status.h"
+#include "mdn/status.h"
 
 typedef enum StandardStreamsRedirection_StreamID_t_ {
     STREAM_ID_STDIN,
@@ -37,4 +37,4 @@ mdn_Status_t StandardStreamsRedirection_stop(StandardStreamsRedirection_StreamID
 }
 #endif  // __cplusplus
 
-#endif  // STANDARD_STREAMS_REDIRECTION_H
+#endif  // MDN_STANDARD_STREAMS_REDIRECTION_H

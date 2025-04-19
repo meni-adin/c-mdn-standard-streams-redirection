@@ -7,7 +7,7 @@
             "generator": "Ninja",
             "cacheVariables": {
                 "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
-                "C_STANDARD_STREAMS_REDIRECTION_ENABLE_TESTS": "ON"
+                "MDN_STANDARD_STREAMS_REDIRECTION_ENABLE_TESTS": "ON"
             }
         },
         {
@@ -15,7 +15,7 @@
             "hidden": true,
             "inherits": ["config-common"],
             "cacheVariables": {
-                "C_STANDARD_STREAMS_REDIRECTION_SAFE_MODE": {
+                "MDN_STANDARD_STREAMS_REDIRECTION_SAFE_MODE": {
                     "type": "BOOL",
                     "value": "ON"
                 },
@@ -27,7 +27,7 @@
             "hidden": true,
             "inherits": ["config-common"],
             "cacheVariables": {
-                "C_STANDARD_STREAMS_REDIRECTION_SAFE_MODE": {
+                "MDN_STANDARD_STREAMS_REDIRECTION_SAFE_MODE": {
                     "type": "BOOL",
                     "value": "OFF"
                 },
@@ -39,7 +39,7 @@
             "hidden": true,
             "inherits": ["config-common"],
             "cacheVariables": {
-                "SANITIZED_BUILD": {
+                "MDN_STANDARD_STREAMS_REDIRECTION_SANITIZED_BUILD": {
                     "type": "BOOL",
                     "value": "ON"
                 }
@@ -50,7 +50,7 @@
             "hidden": true,
             "inherits": ["config-common"],
             "cacheVariables": {
-                "SANITIZED_BUILD": {
+                "MDN_STANDARD_STREAMS_REDIRECTION_SANITIZED_BUILD": {
                     "type": "BOOL",
                     "value": "OFF"
                 }
