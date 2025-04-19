@@ -23,15 +23,15 @@ extern "C" {
 
 #include "mdn/status.h"
 
-typedef enum StandardStreamsRedirection_StreamID_t_ {
-    STREAM_ID_STDIN,
-    STREAM_ID_STDOUT,
-    STREAM_ID_STDERR,
-    STREAM_ID_COUNT,
-} StandardStreamsRedirection_StreamID_t;
+typedef enum mdn_StandardStreamsRedirection_StreamID_t_ {
+    MDN_STANDARD_STREAMS_REDIRECTION_STREAM_ID_STDIN,
+    MDN_STANDARD_STREAMS_REDIRECTION_STREAM_ID_STDOUT,
+    MDN_STANDARD_STREAMS_REDIRECTION_STREAM_ID_STDERR,
+    MDN_STANDARD_STREAMS_REDIRECTION_STREAM_ID_COUNT,
+} mdn_StandardStreamsRedirection_StreamID_t;
 
-mdn_Status_t StandardStreamsRedirection_start(StandardStreamsRedirection_StreamID_t streamID, FILE *redirectionFile);
-mdn_Status_t StandardStreamsRedirection_stop(StandardStreamsRedirection_StreamID_t streamID);
+mdn_Status_t mdn_StandardStreamsRedirection_start(mdn_StandardStreamsRedirection_StreamID_t streamID, FILE *redirectionFile);
+mdn_Status_t mdn_StandardStreamsRedirection_stop(mdn_StandardStreamsRedirection_StreamID_t streamID);
 
 #ifdef __cplusplus
 }

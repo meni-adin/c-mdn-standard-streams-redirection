@@ -5,9 +5,9 @@
 
 #include "mdn/status.h"
 
-#ifdef C_STANDARD_STREAMS_REDIRECTION_SAFE_MODE
-# define IS_VALID_STREAM_ID(streamID) ((0 <= (streamID)) && ((streamID) < STREAM_ID_COUNT))
-#endif  // C_STANDARD_STREAMS_REDIRECTION_SAFE_MODE
+#ifdef MDN_STANDARD_STREAMS_REDIRECTION_SAFE_MODE
+# define IS_VALID_STREAM_ID(streamID) ((0 <= (streamID)) && ((streamID) < MDN_STANDARD_STREAMS_REDIRECTION_STREAM_ID_COUNT))
+#endif  // MDN_STANDARD_STREAMS_REDIRECTION_SAFE_MODE
 
 typedef struct StandardStreamsRedirection_StreamData_t_ {
     int  backupFD;
@@ -15,41 +15,41 @@ typedef struct StandardStreamsRedirection_StreamData_t_ {
 } StandardStreamsRedirection_StreamData_t;
 
 typedef struct StandardStreamsRedirection_InternalState_t_ {
-    StandardStreamsRedirection_StreamData_t streamsData[STREAM_ID_COUNT];
+    StandardStreamsRedirection_StreamData_t streamsData[MDN_STANDARD_STREAMS_REDIRECTION_STREAM_ID_COUNT];
 } StandardStreamsRedirection_InternalState_t;
 
 static StandardStreamsRedirection_InternalState_t  g_StandardStreamsRedirection_internalState_;
 static StandardStreamsRedirection_InternalState_t *g_StandardStreamsRedirection_internalState = &g_StandardStreamsRedirection_internalState_;
 
-static void StandardStreamsRedirection_flushStream(StandardStreamsRedirection_StreamID_t streamID) {
+static void mdn_StandardStreamsRedirection_flushStream(mdn_StandardStreamsRedirection_StreamID_t streamID) {
     switch (streamID) {
-        case STREAM_ID_STDOUT:
+        case MDN_STANDARD_STREAMS_REDIRECTION_STREAM_ID_STDOUT:
             (void)fflush(stdout);
             break;
-        case STREAM_ID_STDERR:
+        case MDN_STANDARD_STREAMS_REDIRECTION_STREAM_ID_STDERR:
             (void)fflush(stderr);
             break;
     }
 }
 
-static void StandardStreamsRedirection_clearEOF(StandardStreamsRedirection_StreamID_t streamID) {
+static void mdn_StandardStreamsRedirection_clearEOF(mdn_StandardStreamsRedirection_StreamID_t streamID) {
     switch (streamID) {
-        case STREAM_ID_STDIN:
+        case MDN_STANDARD_STREAMS_REDIRECTION_STREAM_ID_STDIN:
             clearerr(stdin);
             break;
-        case STREAM_ID_STDOUT:
+        case MDN_STANDARD_STREAMS_REDIRECTION_STREAM_ID_STDOUT:
             clearerr(stdout);
             break;
-        case STREAM_ID_STDERR:
+        case MDN_STANDARD_STREAMS_REDIRECTION_STREAM_ID_STDERR:
             clearerr(stderr);
             break;
     }
 }
 
-mdn_Status_t StandardStreamsRedirection_start(StandardStreamsRedirection_StreamID_t streamID, FILE *redirectionFile) {
+mdn_Status_t mdn_StandardStreamsRedirection_start(mdn_StandardStreamsRedirection_StreamID_t streamID, FILE *redirectionFile) {
     int redirectionFD, backupFD, result;
 
-#ifdef C_STANDARD_STREAMS_REDIRECTION_SAFE_MODE
+#ifdef MDN_STANDARD_STREAMS_REDIRECTION_SAFE_MODE
     if (!IS_VALID_STREAM_ID(streamID)) {
         return MDN_STATUS_ERROR_BAD_ARGUMENT;
     }
@@ -59,9 +59,9 @@ mdn_Status_t StandardStreamsRedirection_start(StandardStreamsRedirection_StreamI
     if (g_StandardStreamsRedirection_internalState->streamsData[streamID].isRedirectionActivated == true) {
         return MDN_STATUS_ERROR_INVALID_OPERATION;
     }
-#endif  // C_STANDARD_STREAMS_REDIRECTION_SAFE_MODE
+#endif  // MDN_STANDARD_STREAMS_REDIRECTION_SAFE_MODE
 
-    StandardStreamsRedirection_flushStream(streamID);
+    mdn_StandardStreamsRedirection_flushStream(streamID);
 
     redirectionFD = CROSS_OS_fileno(redirectionFile);
     if (redirectionFD == -1) {
@@ -82,26 +82,26 @@ mdn_Status_t StandardStreamsRedirection_start(StandardStreamsRedirection_StreamI
     return MDN_STATUS_SUCCESS;
 }
 
-mdn_Status_t StandardStreamsRedirection_stop(StandardStreamsRedirection_StreamID_t streamID) {
+mdn_Status_t mdn_StandardStreamsRedirection_stop(mdn_StandardStreamsRedirection_StreamID_t streamID) {
     int result;
 
-#ifdef C_STANDARD_STREAMS_REDIRECTION_SAFE_MODE
+#ifdef MDN_STANDARD_STREAMS_REDIRECTION_SAFE_MODE
     if (!IS_VALID_STREAM_ID(streamID)) {
         return MDN_STATUS_ERROR_BAD_ARGUMENT;
     }
     if (g_StandardStreamsRedirection_internalState->streamsData[streamID].isRedirectionActivated == false) {
         return MDN_STATUS_ERROR_INVALID_OPERATION;
     }
-#endif  // C_STANDARD_STREAMS_REDIRECTION_SAFE_MODE
+#endif  // MDN_STANDARD_STREAMS_REDIRECTION_SAFE_MODE
 
-    StandardStreamsRedirection_flushStream(streamID);
+    mdn_StandardStreamsRedirection_flushStream(streamID);
 
     result = CROSS_OS_dup2(g_StandardStreamsRedirection_internalState->streamsData[streamID].backupFD, (int)streamID);
     if (result == -1) {
         return MDN_STATUS_ERROR_CHECK_ERRNO;
     }
 
-    StandardStreamsRedirection_clearEOF(streamID);
+    mdn_StandardStreamsRedirection_clearEOF(streamID);
 
     return MDN_STATUS_SUCCESS;
 }

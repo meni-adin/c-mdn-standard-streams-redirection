@@ -183,9 +183,9 @@ TEST_F(StandardStreamsRedirectionTest, StdinRedirection) {
 
     ASSERT_NO_FATAL_FAILURE(openStdinRedirectionFileForReading());
 
-    ASSERT_EQ(StandardStreamsRedirection_start(STREAM_ID_STDIN, stdinRedirectionFile), MDN_STATUS_SUCCESS);
+    ASSERT_EQ(mdn_StandardStreamsRedirection_start(MDN_STANDARD_STREAMS_REDIRECTION_STREAM_ID_STDIN, stdinRedirectionFile), MDN_STATUS_SUCCESS);
     readStreamToString(std::cin, stdinRedirectionFileContent1);
-    ASSERT_EQ(StandardStreamsRedirection_stop(STREAM_ID_STDIN), MDN_STATUS_SUCCESS);
+    ASSERT_EQ(mdn_StandardStreamsRedirection_stop(MDN_STANDARD_STREAMS_REDIRECTION_STREAM_ID_STDIN), MDN_STATUS_SUCCESS);
 
     ASSERT_NO_FATAL_FAILURE(closeTestFile(stdinRedirectionFile)) << "Failed to close file: " << stdinRedirectionFileName;
 
@@ -195,9 +195,9 @@ TEST_F(StandardStreamsRedirectionTest, StdinRedirection) {
 TEST_F(StandardStreamsRedirectionTest, StdoutRedirection) {
     ASSERT_NO_FATAL_FAILURE(openStdoutRedirectionFileForWriting());
 
-    ASSERT_EQ(StandardStreamsRedirection_start(STREAM_ID_STDOUT, stdoutRedirectionFile), MDN_STATUS_SUCCESS);
+    ASSERT_EQ(mdn_StandardStreamsRedirection_start(MDN_STANDARD_STREAMS_REDIRECTION_STREAM_ID_STDOUT, stdoutRedirectionFile), MDN_STATUS_SUCCESS);
     std::cout << stdout1stLine;
-    ASSERT_EQ(StandardStreamsRedirection_stop(STREAM_ID_STDOUT), MDN_STATUS_SUCCESS);
+    ASSERT_EQ(mdn_StandardStreamsRedirection_stop(MDN_STANDARD_STREAMS_REDIRECTION_STREAM_ID_STDOUT), MDN_STATUS_SUCCESS);
 
     ASSERT_NO_FATAL_FAILURE(closeTestFile(stdoutRedirectionFile)) << "Failed to close file: " << stdoutRedirectionFileName;
 
@@ -208,9 +208,9 @@ TEST_F(StandardStreamsRedirectionTest, StdoutRedirection) {
 TEST_F(StandardStreamsRedirectionTest, StderrRedirection) {
     ASSERT_NO_FATAL_FAILURE(openStderrRedirectionFileForWriting());
 
-    ASSERT_EQ(StandardStreamsRedirection_start(STREAM_ID_STDERR, stderrRedirectionFile), MDN_STATUS_SUCCESS);
+    ASSERT_EQ(mdn_StandardStreamsRedirection_start(MDN_STANDARD_STREAMS_REDIRECTION_STREAM_ID_STDERR, stderrRedirectionFile), MDN_STATUS_SUCCESS);
     std::cerr << stderr1stLine;
-    ASSERT_EQ(StandardStreamsRedirection_stop(STREAM_ID_STDERR), MDN_STATUS_SUCCESS);
+    ASSERT_EQ(mdn_StandardStreamsRedirection_stop(MDN_STANDARD_STREAMS_REDIRECTION_STREAM_ID_STDERR), MDN_STATUS_SUCCESS);
 
     ASSERT_NO_FATAL_FAILURE(closeTestFile(stderrRedirectionFile)) << "Failed to close file: " << stderrRedirectionFileName;
 
@@ -225,15 +225,15 @@ TEST_F(StandardStreamsRedirectionTest, StdinStdoutStderrRedirection) {
     ASSERT_NO_FATAL_FAILURE(openStdoutRedirectionFileForWriting());
     ASSERT_NO_FATAL_FAILURE(openStderrRedirectionFileForWriting());
 
-    ASSERT_EQ(StandardStreamsRedirection_start(STREAM_ID_STDIN, stdinRedirectionFile), MDN_STATUS_SUCCESS);
-    ASSERT_EQ(StandardStreamsRedirection_start(STREAM_ID_STDOUT, stdoutRedirectionFile), MDN_STATUS_SUCCESS);
-    ASSERT_EQ(StandardStreamsRedirection_start(STREAM_ID_STDERR, stderrRedirectionFile), MDN_STATUS_SUCCESS);
+    ASSERT_EQ(mdn_StandardStreamsRedirection_start(MDN_STANDARD_STREAMS_REDIRECTION_STREAM_ID_STDIN, stdinRedirectionFile), MDN_STATUS_SUCCESS);
+    ASSERT_EQ(mdn_StandardStreamsRedirection_start(MDN_STANDARD_STREAMS_REDIRECTION_STREAM_ID_STDOUT, stdoutRedirectionFile), MDN_STATUS_SUCCESS);
+    ASSERT_EQ(mdn_StandardStreamsRedirection_start(MDN_STANDARD_STREAMS_REDIRECTION_STREAM_ID_STDERR, stderrRedirectionFile), MDN_STATUS_SUCCESS);
     readStreamToString(std::cin, stdinRedirectionFileContent1);
     std::cout << stdout1stLine;
     std::cerr << stderr1stLine;
-    ASSERT_EQ(StandardStreamsRedirection_stop(STREAM_ID_STDIN), MDN_STATUS_SUCCESS);
-    ASSERT_EQ(StandardStreamsRedirection_stop(STREAM_ID_STDOUT), MDN_STATUS_SUCCESS);
-    ASSERT_EQ(StandardStreamsRedirection_stop(STREAM_ID_STDERR), MDN_STATUS_SUCCESS);
+    ASSERT_EQ(mdn_StandardStreamsRedirection_stop(MDN_STANDARD_STREAMS_REDIRECTION_STREAM_ID_STDIN), MDN_STATUS_SUCCESS);
+    ASSERT_EQ(mdn_StandardStreamsRedirection_stop(MDN_STANDARD_STREAMS_REDIRECTION_STREAM_ID_STDOUT), MDN_STATUS_SUCCESS);
+    ASSERT_EQ(mdn_StandardStreamsRedirection_stop(MDN_STANDARD_STREAMS_REDIRECTION_STREAM_ID_STDERR), MDN_STATUS_SUCCESS);
 
     ASSERT_NO_FATAL_FAILURE(closeTestFile(stdinRedirectionFile)) << "Failed to close file: " << stdinRedirectionFileName;
     ASSERT_NO_FATAL_FAILURE(closeTestFile(stdoutRedirectionFile)) << "Failed to close file: " << stdoutRedirectionFileName;
@@ -257,9 +257,9 @@ TEST_F(StandardStreamsRedirectionTest, StdinRedirectionRestore) {
     } else {
         ASSERT_NO_FATAL_FAILURE(openStdinRedirectionFileForReading());
 
-        ASSERT_EQ(StandardStreamsRedirection_start(STREAM_ID_STDIN, stdinRedirectionFile), MDN_STATUS_SUCCESS);
+        ASSERT_EQ(mdn_StandardStreamsRedirection_start(MDN_STANDARD_STREAMS_REDIRECTION_STREAM_ID_STDIN, stdinRedirectionFile), MDN_STATUS_SUCCESS);
         readStreamToString(std::cin, stdinRedirectionFileContent1);
-        ASSERT_EQ(StandardStreamsRedirection_stop(STREAM_ID_STDIN), MDN_STATUS_SUCCESS);
+        ASSERT_EQ(mdn_StandardStreamsRedirection_stop(MDN_STANDARD_STREAMS_REDIRECTION_STREAM_ID_STDIN), MDN_STATUS_SUCCESS);
         readStreamToString(std::cin, stdinRedirectionFileContent2);
 
         ASSERT_NO_FATAL_FAILURE(closeTestFile(stdinRedirectionFile)) << "Failed to close file: " << stdinRedirectionFileName;
@@ -281,9 +281,9 @@ TEST_F(StandardStreamsRedirectionTest, StdoutRedirectionRestore) {
     } else {
         ASSERT_NO_FATAL_FAILURE(openStdoutRedirectionFileForWriting());
 
-        ASSERT_EQ(StandardStreamsRedirection_start(STREAM_ID_STDOUT, stdoutRedirectionFile), MDN_STATUS_SUCCESS);
+        ASSERT_EQ(mdn_StandardStreamsRedirection_start(MDN_STANDARD_STREAMS_REDIRECTION_STREAM_ID_STDOUT, stdoutRedirectionFile), MDN_STATUS_SUCCESS);
         std::cout << stdout1stLine;
-        ASSERT_EQ(StandardStreamsRedirection_stop(STREAM_ID_STDOUT), MDN_STATUS_SUCCESS);
+        ASSERT_EQ(mdn_StandardStreamsRedirection_stop(MDN_STANDARD_STREAMS_REDIRECTION_STREAM_ID_STDOUT), MDN_STATUS_SUCCESS);
         std::cout << stdout2ndLine;
 
         ASSERT_NO_FATAL_FAILURE(closeTestFile(stdoutRedirectionFile)) << "Failed to close file: " << stdoutRedirectionFileName;
@@ -305,9 +305,9 @@ TEST_F(StandardStreamsRedirectionTest, StderrRedirectionRestore) {
     } else {
         ASSERT_NO_FATAL_FAILURE(openStderrRedirectionFileForWriting());
 
-        ASSERT_EQ(StandardStreamsRedirection_start(STREAM_ID_STDERR, stderrRedirectionFile), MDN_STATUS_SUCCESS);
+        ASSERT_EQ(mdn_StandardStreamsRedirection_start(MDN_STANDARD_STREAMS_REDIRECTION_STREAM_ID_STDERR, stderrRedirectionFile), MDN_STATUS_SUCCESS);
         std::cerr << stderr1stLine;
-        ASSERT_EQ(StandardStreamsRedirection_stop(STREAM_ID_STDERR), MDN_STATUS_SUCCESS);
+        ASSERT_EQ(mdn_StandardStreamsRedirection_stop(MDN_STANDARD_STREAMS_REDIRECTION_STREAM_ID_STDERR), MDN_STATUS_SUCCESS);
         std::cerr << stderr2ndLine;
 
         ASSERT_NO_FATAL_FAILURE(closeTestFile(stderrRedirectionFile)) << "Failed to close file: " << stderrRedirectionFileName;
@@ -335,15 +335,15 @@ TEST_F(StandardStreamsRedirectionTest, StdinStdoutStderrRedirectionRestore) {
         ASSERT_NO_FATAL_FAILURE(openStdoutRedirectionFileForWriting());
         ASSERT_NO_FATAL_FAILURE(openStderrRedirectionFileForWriting());
 
-        ASSERT_EQ(StandardStreamsRedirection_start(STREAM_ID_STDIN, stdinRedirectionFile), MDN_STATUS_SUCCESS);
-        ASSERT_EQ(StandardStreamsRedirection_start(STREAM_ID_STDOUT, stdoutRedirectionFile), MDN_STATUS_SUCCESS);
-        ASSERT_EQ(StandardStreamsRedirection_start(STREAM_ID_STDERR, stderrRedirectionFile), MDN_STATUS_SUCCESS);
+        ASSERT_EQ(mdn_StandardStreamsRedirection_start(MDN_STANDARD_STREAMS_REDIRECTION_STREAM_ID_STDIN, stdinRedirectionFile), MDN_STATUS_SUCCESS);
+        ASSERT_EQ(mdn_StandardStreamsRedirection_start(MDN_STANDARD_STREAMS_REDIRECTION_STREAM_ID_STDOUT, stdoutRedirectionFile), MDN_STATUS_SUCCESS);
+        ASSERT_EQ(mdn_StandardStreamsRedirection_start(MDN_STANDARD_STREAMS_REDIRECTION_STREAM_ID_STDERR, stderrRedirectionFile), MDN_STATUS_SUCCESS);
         readStreamToString(std::cin, stdinRedirectionFileContent1);
         std::cout << stdout1stLine;
         std::cerr << stderr1stLine;
-        ASSERT_EQ(StandardStreamsRedirection_stop(STREAM_ID_STDIN), MDN_STATUS_SUCCESS);
-        ASSERT_EQ(StandardStreamsRedirection_stop(STREAM_ID_STDOUT), MDN_STATUS_SUCCESS);
-        ASSERT_EQ(StandardStreamsRedirection_stop(STREAM_ID_STDERR), MDN_STATUS_SUCCESS);
+        ASSERT_EQ(mdn_StandardStreamsRedirection_stop(MDN_STANDARD_STREAMS_REDIRECTION_STREAM_ID_STDIN), MDN_STATUS_SUCCESS);
+        ASSERT_EQ(mdn_StandardStreamsRedirection_stop(MDN_STANDARD_STREAMS_REDIRECTION_STREAM_ID_STDOUT), MDN_STATUS_SUCCESS);
+        ASSERT_EQ(mdn_StandardStreamsRedirection_stop(MDN_STANDARD_STREAMS_REDIRECTION_STREAM_ID_STDERR), MDN_STATUS_SUCCESS);
         readStreamToString(std::cin, stdinRedirectionFileContent2);
         std::cout << stdout2ndLine;
         std::cerr << stderr2ndLine;
