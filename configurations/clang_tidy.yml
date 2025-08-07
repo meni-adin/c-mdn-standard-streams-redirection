@@ -23,8 +23,11 @@ Checks: >-
   -clang-diagnostic-global-constructors,
   -clang-diagnostic-pre-c++17-compat,
   -clang-diagnostic-pre-c++20-compat-pedantic,
+  -clang-diagnostic-pre-c++20-compat,
+  -clang-diagnostic-pre-c11-compat,
   -clang-diagnostic-switch-default,
   -clang-diagnostic-switch,
+  -clang-diagnostic-shadow-field-in-constructor,
   -clang-diagnostic-unsafe-buffer-usage,
   -misc-include-cleaner,
   -misc-non-private-member-variables-in-classes,
@@ -35,6 +38,3 @@ Checks: >-
   -readability-function-cognitive-complexity,
   -readability-isolate-declaration,
 HeaderFilterRegex: '.*'
-
-# Notes:
-# - Maybe bring back `readability-function-cognitive-complexity`.
