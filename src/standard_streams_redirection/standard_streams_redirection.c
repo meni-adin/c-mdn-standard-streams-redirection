@@ -66,7 +66,7 @@ mdn_Status_t mdn_StandardStreamsRedirection_start(mdn_StandardStreamsRedirection
     if (!MDN_STANDARD_STREAMS_REDIRECTION_IS_VALID_STREAM_ID(streamID)) {
         return MDN_STATUS_ERROR_BAD_ARGUMENT;
     }
-    if (file == NULL) {
+    if (redirectionFile == NULL) {
         return MDN_STATUS_ERROR_BAD_ARGUMENT;
     }
     if (g_StandardStreamsRedirection_internalState->streamsData[streamID].isRedirectionActivated == true) {
@@ -92,6 +92,9 @@ mdn_Status_t mdn_StandardStreamsRedirection_start(mdn_StandardStreamsRedirection
         return MDN_STATUS_ERROR_CHECK_ERRNO;
     }
 
+#ifdef MDN_STANDARD_STREAMS_REDIRECTION_SAFE_MODE
+    g_StandardStreamsRedirection_internalState->streamsData[streamID].isRedirectionActivated = true;
+#endif  // MDN_STANDARD_STREAMS_REDIRECTION_SAFE_MODE
     return MDN_STATUS_SUCCESS;
 }
 
@@ -116,5 +119,8 @@ mdn_Status_t mdn_StandardStreamsRedirection_stop(mdn_StandardStreamsRedirection_
 
     mdn_StandardStreamsRedirection_clearEOF(streamID);
 
+#ifdef MDN_STANDARD_STREAMS_REDIRECTION_SAFE_MODE
+    g_StandardStreamsRedirection_internalState->streamsData[streamID].isRedirectionActivated = false;
+#endif  // MDN_STANDARD_STREAMS_REDIRECTION_SAFE_MODE
     return MDN_STATUS_SUCCESS;
 }
